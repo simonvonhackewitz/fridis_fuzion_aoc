@@ -104,7 +104,7 @@ dec15 =>
             until yx ||> y,x->a[y,x] = $"@"
               rx <- yx.1
               ry <- yx.0
-              input2.codepoints.for_each s->
+              for s in input2.codepoints do
                 d := dir s
                 say "d='$d'  "
                 match move rx.get ry.get d
