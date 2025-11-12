@@ -54,8 +54,13 @@ dec15 =>
         lm_3 ! ()->
           lm_4 ! ()->
             a := (mutate.array2 String).type.new lm_2 h.as_i64 w.as_i64 ""
+            say "***** START: a *****"
+            say a
+            say "***** END: a *****"
             rx := lm_3.env.new (i64 0)
+            say "***** rx='{rx.get}' *****"
             ry := lm_4.env.new (i64 0)
+            say "***** ry='{ry.get}' *****"
             move(xx, yy, d) option (i64,i64)=>
               nx := xx + d.0
               ny := yy + d.1
