@@ -70,6 +70,7 @@ dec15 =>
             ry := lm_4.env.new (i64 0)
             say "***** ry='{ry.get}' *****"
             move(xx, yy, d) option (i64,i64)=>
+              yak "xx='$xx' yy='$yy' d='$d' "
               nx := xx + d.0
               yak "nx='$nx' "
               ny := yy + d.1
