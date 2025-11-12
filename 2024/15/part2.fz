@@ -13,10 +13,23 @@ dec15 =>
   # input := io.stdin.read_string
   #            .split "\n\n"
   input1 := input[0].split "\n" .map (.codepoints)
+  say "***** START: input1 *****"
+  say input1
+  say "***** END: input1 *****"
+
   input2 := input[1].replace "\n" ""
+  say "***** START: input2 *****"
+  say input2
+  say "***** END: input2 *****"
+
   h := input1.count
+  say "***** h='$h' *****"
   w := input1[0].count
+  say "***** w='$w' *****"
   area := array2 codepoint h w y,x->input1[y][x]
+  say "***** START: area *****"
+  say area
+  say "***** END: area *****"
 
   dir(s) =>
     if      s = "^" then (i64  0, i64 -1)
