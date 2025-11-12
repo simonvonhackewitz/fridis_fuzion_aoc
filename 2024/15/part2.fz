@@ -71,7 +71,9 @@ dec15 =>
             say "***** ry='{ry.get}' *****"
             move(xx, yy, d) option (i64,i64)=>
               nx := xx + d.0
+              yak "nx='$nx' "
               ny := yy + d.1
+              yak "ny='$ny' "
               v := a[ny,nx]
               yak "v='$v' "
               if v = "#" then
@@ -115,75 +117,76 @@ dec15 =>
               .sum
 
 
-  part2 =>
-    lm : mutate is
-    lm ! ()->
-      a := (mutate.array2 String).type.new lm h.as_i64 (2*w).as_i64 ""
-      ryx := lm.env.new (i64 0, i64 0)
+  # part2 =>
+  #   lm : mutate is
+  #   lm ! ()->
+  #     a := (mutate.array2 String).type.new lm h.as_i64 (2*w).as_i64 ""
+  #     ryx := lm.env.new (i64 0, i64 0)
 
-      moveH(yyxx, d) option (i64,i64)=>
-        yy,xx := yyxx
-        nx := xx + d
-        v := a[yy,nx]
-        if v = "#" then nil
-        else if v = "[" || v = "]" then
-          match moveH (yy,nx) d
-            nil => nil
-            _ tuple =>
-              a[yy,nx] := a[yy,xx]
-              a[yy,xx] := "."
-              (yy,nx)
-        else if v = "." then
-          a[yy,nx] := a[yy,xx]
-          a[yy,xx] := "."
-          (yy,nx)
-        else
-          panic "found_2 $v"
+  #     moveH(yyxx, d) option (i64,i64)=>
+  #       yy,xx := yyxx
+  #       nx := xx + d
+  #       v := a[yy,nx]
+  #       if v = "#" then nil
+  #       else if v = "[" || v = "]" then
+  #         match moveH (yy,nx) d
+  #           nil => nil
+  #           _ tuple =>
+  #             a[yy,nx] := a[yy,xx]
+  #             a[yy,xx] := "."
+  #             (yy,nx)
+  #       else if v = "." then
+  #         a[yy,nx] := a[yy,xx]
+  #         a[yy,xx] := "."
+  #         (yy,nx)
+  #       else
+  #         panic "found_2 $v"
 
-      move_ixs(xxs) => (0..2*w-1).filter nx->xxs[nx]
-      move_blks(xxs,ny) => move_ixs xxs .map nx->a[ny,nx.as_i64]
-      nxxs(ny, xxs) => array 2*w (nx -> (a[ny,nx.as_i64] = "[" && (xxs[nx  ] || xxs[nx+1]) ||
-                                         a[ny,nx.as_i64] = "]" && (xxs[nx-1] || xxs[nx  ])   ))
+  #     move_ixs(xxs) => (0..2*w-1).filter nx->xxs[nx]
+  #     move_blks(xxs,ny) => move_ixs xxs .map nx->a[ny,nx.as_i64]
+  #     nxxs(ny, xxs) => array 2*w (nx -> (a[ny,nx.as_i64] = "[" && (xxs[nx  ] || xxs[nx+1]) ||
+  #                                        a[ny,nx.as_i64] = "]" && (xxs[nx-1] || xxs[nx  ])   ))
 
-      can_moveV(xxs, yy, d) =>
-        ny := yy + d
-        (!(move_blks xxs ny ∃ ="#") &&
-         ((move_blks xxs ny ∀ =".") ||
-          can_moveV (nxxs ny xxs) ny d))
+  #     can_moveV(xxs, yy, d) =>
+  #       ny := yy + d
+  #       (!(move_blks xxs ny ∃ ="#") &&
+  #        ((move_blks xxs ny ∀ =".") ||
+  #         can_moveV (nxxs ny xxs) ny d))
 
-      do_moveV(xxs, yy, d) =>
-        if move_blks xxs yy ∃ !="." then
-          do_moveV (nxxs yy+d xxs) yy+d d
-          move_ixs xxs .for_each (nx -> a[yy+d,nx.as_i64] := a[yy,nx.as_i64]; a[yy,nx.as_i64] := ".")
+  #     do_moveV(xxs, yy, d) =>
+  #       if move_blks xxs yy ∃ !="." then
+  #         do_moveV (nxxs yy+d xxs) yy+d d
+  #         move_ixs xxs .for_each (nx -> a[yy+d,nx.as_i64] := a[yy,nx.as_i64]; a[yy,nx.as_i64] := ".")
 
-      moveV(d) option (i64,i64) =>
-        xxs := array 2*w =ryx.get.1.as_i32
-        y,x := ryx.get
-        if can_moveV xxs y d then  do_moveV xxs y d; (y+d, x)
-        else                                         nil
+  #     moveV(d) option (i64,i64) =>
+  #       xxs := array 2*w =ryx.get.1.as_i32
+  #       y,x := ryx.get
+  #       if can_moveV xxs y d then  do_moveV xxs y d; (y+d, x)
+  #       else                                         nil
 
-      for yx in a.index_pairs do
-        y,x := yx
-        v := area[y.as_i32,x.as_i32/2]
-        v1 := if      v = "O" then ["[","]"]
-              else if v = "@" then ["@","."]
-              else                 [v  ,v  ]
-        a[y,x] := v1[x.as_i32 % 2]
+  #     for yx in a.index_pairs do
+  #       y,x := yx
+  #       v := area[y.as_i32,x.as_i32/2]
+  #       v1 := if      v = "O" then ["[","]"]
+  #             else if v = "@" then ["@","."]
+  #             else                 [v  ,v  ]
+  #       a[y,x] := v1[x.as_i32 % 2]
 
-      for yx in a.index_pairs until yx ||> y,x->a[y,x] = $"@"
-        ryx <- yx
-        input2.codepoints.for_each s->
-          f => if      "^v".contains s then d := ("^-v".find s).val.as_i64-1; moveV d
-               else if "<>".contains s then d := ("<->".find s).val.as_i64-1; moveH ryx.get d
-               else panic "dir unknown $s"
+  #     for yx in a.index_pairs until yx ||> y,x->a[y,x] = $"@"
+  #       ryx <- yx
+  #       input2.codepoints.for_each s->
+  #         f => if      "^v".contains s then d := ("^-v".find s).val.as_i64-1; moveV d
+  #              else if "<>".contains s then d := ("<->".find s).val.as_i64-1; moveH ryx.get d
+  #              else panic "dir unknown $s"
 
-          match f
-            nil     =>
-            t tuple => ryx <- t
-      else
-        panic "robot not found"
+  #         match f
+  #           nil     =>
+  #           t tuple => ryx <- t
+  #     else
+  #       panic "robot not found"
 
-      a.index_pairs.map ||>y,x->a[y,x]="["?y*100+x:(i64 0) # NYI: CLEANUP: explicit type should not be necessary when type inference improves, see #5866
-                   .sum
+  #     a.index_pairs.map ||>y,x->a[y,x]="["?y*100+x:(i64 0) # NYI: CLEANUP: explicit type should not be necessary when type inference improves, see #5866
+  #                  .sum
 
-  say "$part1,$part2"
+  # say "$part1,$part2"
+  say "$part1"
