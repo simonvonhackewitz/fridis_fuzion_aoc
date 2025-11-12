@@ -44,14 +44,14 @@ dec15 =>
           a[yy,xx] := "."
           (nx,ny)
         else
-          panic "found $v"
+          panic "found_1 $v"
 
       for yx in a.index_pairs do
         y,x := yx
         a[y,x] := area[y.as_i32,x.as_i32]
 
       for yx in a.index_pairs do
-      until yx ||> y,x->a[y,x] = "@"
+      until yx ||> y,x->a[y,x] = $"@"
         rx <- yx.1
         ry <- yx.0
         input2.codepoints.for_each s->
@@ -89,7 +89,7 @@ dec15 =>
           a[yy,xx] := "."
           (yy,nx)
         else
-          panic "found $v"
+          panic "found_2 $v"
 
       move_ixs(xxs) => (0..2*w-1).filter nx->xxs[nx]
       move_blks(xxs,ny) => move_ixs xxs .map nx->a[ny,nx.as_i64]
@@ -121,7 +121,7 @@ dec15 =>
               else                 [v  ,v  ]
         a[y,x] := v1[x.as_i32 % 2]
 
-      for yx in a.index_pairs until yx ||> y,x->a[y,x] = "@"
+      for yx in a.index_pairs until yx ||> y,x->a[y,x] = $"@"
         ryx <- yx
         input2.codepoints.for_each s->
           f => if      "^v".contains s then d := ("^-v".find s).val.as_i64-1; moveV d
