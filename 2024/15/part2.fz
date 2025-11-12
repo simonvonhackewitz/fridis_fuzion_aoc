@@ -6,9 +6,17 @@ dec15 =>
     String.from (LM ! ()->io.stdin.reader LM ! ()->io.buffered LM .read_fully)
     .split "\n\n"
 
-  # say "***** START: input *****"
-  # say input
-  # say "***** END: input *****"
+  check !(input.contains "\r")
+  check input.first.val.starts_with "####"
+  check input.last.val.trim.ends_with "<v<^v<"
+  say "input length: {input.count}"
+  say "input inner byte_length: {input.map (.byte_length)}"
+  say "input inner codepoint_length: {input.map (.codepoint_length)}"
+
+
+  say "***** START: input *****"
+  say input
+  say "***** END: input *****"
 
   # input := io.stdin.read_string
   #            .split "\n\n"
@@ -65,7 +73,7 @@ dec15 =>
               nx := xx + d.0
               ny := yy + d.1
               v := a[ny,nx]
-              say "v='$v'"
+              yak "v='$v' "
               if v = "#" then
                 # say "1. if"
                 nil
@@ -95,9 +103,7 @@ dec15 =>
               ry <- yx.0
               input2.codepoints.for_each s->
                 d := dir s
-                say "***** START: d *****"
-                say d
-                say "***** END: d *****"
+                say "d='$d'  "
                 match move rx.get ry.get d
                   nil => unit
                   t tuple i64 i64 => rx <- t.0; ry <- t.1
