@@ -103,7 +103,9 @@ dec15 =>
             for yx in a.index_pairs do
             until yx ||> y,x->a[y,x] = $"@"
               rx <- yx.1
+              yak "rx='$rx' yx.1='{yx.1}'"
               ry <- yx.0
+              yak "ry='$ry' yx.0='{yx.0}'"
               for s in input2.codepoints do
                 d := dir s
                 say "d='$d'  "
