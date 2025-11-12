@@ -65,7 +65,7 @@ dec15 =>
               nx := xx + d.0
               ny := yy + d.1
               v := a[ny,nx]
-              say "'$v'"
+              say "v='$v'"
               if v = "#" then
                 # say "1. if"
                 nil
@@ -95,6 +95,9 @@ dec15 =>
               ry <- yx.0
               input2.codepoints.for_each s->
                 d := dir s
+                say "***** START: d *****"
+                say d
+                say "***** END: d *****"
                 match move rx.get ry.get d
                   nil => unit
                   t tuple i64 i64 => rx <- t.0; ry <- t.1
