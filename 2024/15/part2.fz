@@ -6,6 +6,10 @@ dec15 =>
     String.from (LM ! ()->io.stdin.reader LM ! ()->io.buffered LM .read_fully)
     .split "\n\n"
 
+  say "***** START: input *****"
+  say input
+  say "***** END: input *****"
+
   # input := io.stdin.read_string
   #            .split "\n\n"
   input1 := input[0].split "\n" .map (.codepoints)
