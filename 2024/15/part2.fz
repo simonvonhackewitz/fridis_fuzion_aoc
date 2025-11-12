@@ -41,11 +41,12 @@ dec15 =>
         nx := xx + d.0
         ny := yy + d.1
         v := a[ny,nx]
+        say "'$v'"
         if v = "#" then
-          say "1. if"
+          # say "1. if"
           nil
         else if v = "O" then
-          say "2. first els if"
+          # say "2. first els if"
           match move nx ny d
             nil => nil
             _ tuple =>
@@ -53,7 +54,7 @@ dec15 =>
               a[yy,xx] := "."
               (nx,ny)
         else if v = "." then
-          say "3. second else if"
+          # say "3. second else if"
           a[ny,nx] := a[yy,xx]
           a[yy,xx] := "."
           (nx,ny)
