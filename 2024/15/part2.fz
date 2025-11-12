@@ -32,54 +32,60 @@ dec15 =>
       if syx.1 = a.length1-1 then say ""
 
   part1 =>
-    lm : mutate is
-    lm ! ()->
-      a := (mutate.array2 String).type.new lm h.as_i64 w.as_i64 ""
-      rx := lm.env.new (i64 0)
-      ry := lm.env.new (i64 0)
-      move(xx, yy, d) option (i64,i64)=>
-        nx := xx + d.0
-        ny := yy + d.1
-        v := a[ny,nx]
-        say "'$v'"
-        if v = "#" then
-          # say "1. if"
-          nil
-        else if v = "O" then
-          # say "2. first els if"
-          match move nx ny d
-            nil => nil
-            _ tuple =>
-              a[ny,nx] := a[yy,xx]
-              a[yy,xx] := "."
-              (nx,ny)
-        else if v = "." then
-          # say "3. second else if"
-          a[ny,nx] := a[yy,xx]
-          a[yy,xx] := "."
-          (nx,ny)
-        else
-          panic "found_1 $v"
+    lm_1 : mutate is
+    lm_2 : mutate is
+    lm_3 : mutate is
+    lm_4 : mutate is
+    lm_1 ! ()->
+      lm_2 ! ()->
+        lm_3 ! ()->
+          lm_4 ! ()->
+            a := (mutate.array2 String).type.new lm_2 h.as_i64 w.as_i64 ""
+            rx := lm_3.env.new (i64 0)
+            ry := lm_4.env.new (i64 0)
+            move(xx, yy, d) option (i64,i64)=>
+              nx := xx + d.0
+              ny := yy + d.1
+              v := a[ny,nx]
+              say "'$v'"
+              if v = "#" then
+                # say "1. if"
+                nil
+              else if v = "O" then
+                # say "2. first els if"
+                match move nx ny d
+                  nil => nil
+                  _ tuple =>
+                    a[ny,nx] := a[yy,xx]
+                    a[yy,xx] := "."
+                    (nx,ny)
+              else if v = "." then
+                # say "3. second else if"
+                a[ny,nx] := a[yy,xx]
+                a[yy,xx] := "."
+                (nx,ny)
+              else
+                panic "found_1 $v"
 
-      for yx in a.index_pairs do
-        y,x := yx
-        a[y,x] := area[y.as_i32,x.as_i32]
+            for yx in a.index_pairs do
+              y,x := yx
+              a[y,x] := area[y.as_i32,x.as_i32]
 
-      for yx in a.index_pairs do
-      until yx ||> y,x->a[y,x] = $"@"
-        rx <- yx.1
-        ry <- yx.0
-        input2.codepoints.for_each s->
-          d := dir s
-          match move rx.get ry.get d
-            nil => unit
-            t tuple i64 i64 => rx <- t.0; ry <- t.1
-      else
-        panic "robot not found"
+            for yx in a.index_pairs do
+            until yx ||> y,x->a[y,x] = $"@"
+              rx <- yx.1
+              ry <- yx.0
+              input2.codepoints.for_each s->
+                d := dir s
+                match move rx.get ry.get d
+                  nil => unit
+                  t tuple i64 i64 => rx <- t.0; ry <- t.1
+            else
+              panic "robot not found"
 
-      a.index_pairs
-       .map ||>y,x->a[y,x]="O"?y*100+x:(i64 0) # NYI: CLEANUP: explicit type should not be necessary when type inference improves, see #5866
-       .sum
+            a.index_pairs
+              .map ||>y,x->a[y,x]="O"?y*100+x:(i64 0) # NYI: CLEANUP: explicit type should not be necessary when type inference improves, see #5866
+              .sum
 
 
   part2 =>
