@@ -1,7 +1,13 @@
 dec15 =>
 
-  input := io.stdin.read_string
-             .split "\n\n"
+
+  LM : mutate is
+  input :=
+    String.from (LM ! ()->io.stdin.reader LM ! ()->io.buffered LM .read_fully)
+    .split "\n\n"
+
+  # input := io.stdin.read_string
+  #            .split "\n\n"
   input1 := input[0].split "\n" .map (.codepoints)
   input2 := input[1].replace "\n" ""
   h := input1.count
@@ -15,7 +21,6 @@ dec15 =>
     else if s = ">" then (i64  1, i64  0)
     else panic "dir unknown $s"
 
-  lm : mutate is
 
   show(a mutate.array2 String) =>
     for syx in a.index_pairs do
@@ -23,6 +28,7 @@ dec15 =>
       if syx.1 = a.length1-1 then say ""
 
   part1 =>
+    lm : mutate is
     lm ! ()->
       a := (mutate.array2 String).type.new lm h.as_i64 w.as_i64 ""
       rx := lm.env.new (i64 0)
@@ -68,6 +74,7 @@ dec15 =>
 
 
   part2 =>
+    lm : mutate is
     lm ! ()->
       a := (mutate.array2 String).type.new lm h.as_i64 (2*w).as_i64 ""
       ryx := lm.env.new (i64 0, i64 0)
